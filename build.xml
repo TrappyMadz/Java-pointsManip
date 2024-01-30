@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="TestPoint" default="run" basedir=".">
+
+    <!-- Propriétés -->
+    <property name="src.dir" value="src"/>
+    <property name="bin.dir" value="bin"/>
+    <property name="main.class" value="TestPoint"/>
+	<property name="doc.dir" location="doc"/>
+
+    <!-- Cibles -->
+    <target name="clean">
+        <delete dir="${bin.dir}"/>
+    	<delete dir="${doc.dir}"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${bin.dir}"/>
+    	<mkdir dir="${doc.dir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <echo message="La compilation est en cours..."/>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <echo message="La création de l'archive JAR est en cours..."/>
+        <jar destfile="MonProjet.jar" basedir="${bin.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar,doc">
+        <java jar="MonProjet.jar" fork="true"/>
+    </target>
+	
+	  <target name="doc" depends ="jar">
+	    <javadoc sourcepath="src"
+	                destdir="doc" >
+	      <fileset dir="src" defaultexcludes="yes">
+	        <include name="**" />
+	      </fileset>
+	    </javadoc>
+	  </target> 
+
+
+    <!-- Cible par défaut -->
+    <target name="default" depends="run"/>
+
+</project>
